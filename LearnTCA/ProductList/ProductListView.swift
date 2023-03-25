@@ -1,10 +1,3 @@
-//
-//  ProductListView.swift
-//  LearnTCA
-//
-//  Created by Aris on 25/3/23.
-//
-
 import SwiftUI
 import ComposableArchitecture
 
