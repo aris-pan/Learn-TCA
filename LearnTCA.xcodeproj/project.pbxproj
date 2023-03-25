@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0B61DE4929CF061800116408 /* LearnTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61DE4829CF061800116408 /* LearnTCAApp.swift */; };
-		0B61DE4B29CF061800116408 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B61DE4A29CF061800116408 /* ContentView.swift */; };
 		0B61DE4D29CF061800116408 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B61DE4C29CF061800116408 /* Assets.xcassets */; };
 		0B61DE5129CF061800116408 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B61DE5029CF061800116408 /* Preview Assets.xcassets */; };
 		0B61DE5929CF083600116408 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 0B61DE5829CF083600116408 /* ComposableArchitecture */; };
@@ -25,7 +24,6 @@
 /* Begin PBXFileReference section */
 		0B61DE4529CF061800116408 /* LearnTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearnTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B61DE4829CF061800116408 /* LearnTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnTCAApp.swift; sourceTree = "<group>"; };
-		0B61DE4A29CF061800116408 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0B61DE4C29CF061800116408 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0B61DE4E29CF061800116408 /* LearnTCA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LearnTCA.entitlements; sourceTree = "<group>"; };
 		0B61DE5029CF061800116408 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -74,7 +72,6 @@
 				0B61DE6129CF125800116408 /* Product */,
 				0B61DE6029CF124A00116408 /* AddToCart */,
 				0B61DE4829CF061800116408 /* LearnTCAApp.swift */,
-				0B61DE4A29CF061800116408 /* ContentView.swift */,
 				0B61DE4C29CF061800116408 /* Assets.xcassets */,
 				0B61DE4E29CF061800116408 /* LearnTCA.entitlements */,
 				0B61DE4F29CF061800116408 /* Preview Content */,
@@ -196,7 +193,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B61DE5D29CF0E0200116408 /* PlusMinusButton.swift in Sources */,
-				0B61DE4B29CF061800116408 /* ContentView.swift in Sources */,
 				0B61DE4929CF061800116408 /* LearnTCAApp.swift in Sources */,
 				0B61DE6529CF140900116408 /* ProductDomain.swift in Sources */,
 				0BD3C67729CF7BD700C7B2FB /* ProductListView.swift in Sources */,
