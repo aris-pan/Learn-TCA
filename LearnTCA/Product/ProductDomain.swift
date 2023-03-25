@@ -2,7 +2,8 @@ import Foundation
 import ComposableArchitecture
 
 struct ProductDomain {
-  struct State: Equatable {
+  struct State: Equatable, Identifiable {
+    let id: UUID
     let product: Product
     var addToCartState = AddToCartDomain.State()
   }
