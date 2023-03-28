@@ -5,11 +5,11 @@ struct ProductDomain {
   struct State: Equatable, Identifiable {
     let id: UUID
     let product: Product
-    var addToCartState = AddToCartDomain.State()
+    var addToCartState = AddToCartFeature.State()
   }
   
   enum Action: Equatable {
-    case addToCart(AddToCartDomain.Action)
+    case addToCart(AddToCartFeature.Action)
   }
   
   struct Environment {}
@@ -17,13 +17,13 @@ struct ProductDomain {
   static let reducer = AnyReducer<
     State, Action, Environment
   >.combine(
-    AddToCartDomain.reducer
+    AnyReducer {
+      AddToCartFeature()
+    }
       .pullback(
         state: \.addToCartState,
         action: /ProductDomain.Action.addToCart,
-        environment: { _ in
-          AddToCartDomain.Environment()
-        }
+        environment: { $0 }
       ),
     
       .init { state, action, environment in

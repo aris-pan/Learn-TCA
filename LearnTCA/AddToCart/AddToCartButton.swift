@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AddToCartButton: View {
-  let store: Store<AddToCartDomain.State, AddToCartDomain.Action>
+  let store: Store<AddToCartFeature.State, AddToCartFeature.Action>
 
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -29,10 +29,8 @@ struct AddToCartButton_Previews: PreviewProvider {
   static var previews: some View {
     AddToCartButton(
       store: Store(
-        initialState: AddToCartDomain.State(counter: 0),
-        reducer: AddToCartDomain.reducer,
-        environment: AddToCartDomain.Environment()
-      )
+        initialState: AddToCartFeature.State(),
+        reducer: AddToCartFeature())
     )
   }
 }
