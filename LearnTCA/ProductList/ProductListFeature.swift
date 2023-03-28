@@ -1,7 +1,8 @@
 import Foundation
 import ComposableArchitecture
 
-struct ProductListDomain {
+
+struct ProductListFeature: ReducerProtocol {
   struct State: Equatable {
     var productList: IdentifiedArrayOf<ProductFeature.State> = []
     var shouldOpenCart = false
@@ -14,28 +15,16 @@ struct ProductListDomain {
     case setCart(isPresented: Bool)
   }
   
-  struct Environment {
-    var fetchProducts: () async throws -> [Product]
-  }
+  var fetchProducts: () async throws -> [Product]
   
-  static let reducer = AnyReducer<
-    State, Action, Environment
-  >.combine(
-    AnyReducer {
-      ProductFeature()
-    }
-    .forEach(
-      state: \.productList,
-      action: /Action.product(id:action:),
-      environment: { $0 }
-    ),
-    .init { state, action, environment in
+  var body: some ReducerProtocol<State, Action> {
+    Reduce { state, action in
       switch action {
       case .fetchProducts:
         return .task {
           await .fetchProductResponse(
             TaskResult {
-              try await environment.fetchProducts()
+              try await fetchProducts()
             }
           )
         }
@@ -60,7 +49,9 @@ struct ProductListDomain {
       case .setCart(let isPresented):
         state.shouldOpenCart = isPresented
         return .none
-      }
+      }    }
+    .forEach(\.productList, action: /Action.product) {
+      ProductFeature()
     }
-  ).debug()
+  }
 }

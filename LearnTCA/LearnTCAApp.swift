@@ -7,12 +7,9 @@ struct LearnTCAApp: App {
     WindowGroup {
       ProductListView(
         store: Store(
-          initialState: ProductListDomain.State(),
-          reducer: ProductListDomain.reducer,
-          environment: ProductListDomain.Environment(
-            fetchProducts: {
-              Product.sample
-            }
+          initialState: ProductListFeature.State(),
+          reducer: ProductListFeature(
+            fetchProducts: { Product.sample }
           )
         )
       )

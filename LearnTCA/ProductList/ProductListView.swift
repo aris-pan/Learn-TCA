@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ProductListView: View {
-  let store: Store<ProductListDomain.State, ProductListDomain.Action>
+  let store: Store<ProductListFeature.State, ProductListFeature.Action>
   var body: some View {
     NavigationStack {
       WithViewStore(self.store) { viewStore in
@@ -10,7 +10,7 @@ struct ProductListView: View {
           ForEachStore(
             self.store.scope(
               state: \.productList,
-              action: ProductListDomain.Action.product(id:action:)
+              action: ProductListFeature.Action.product(id:action:)
             )
           ) {
             ProductCell(store: $0)
@@ -46,12 +46,9 @@ struct ProductListView_Previews: PreviewProvider {
   static var previews: some View {
     ProductListView(
       store: Store(
-        initialState: ProductListDomain.State(),
-        reducer: ProductListDomain.reducer,
-        environment: ProductListDomain.Environment(
-          fetchProducts: {
-            Product.sample
-          }
+        initialState: ProductListFeature.State(),
+        reducer: ProductListFeature(
+          fetchProducts: { Product.sample }
         )
       )
     )
