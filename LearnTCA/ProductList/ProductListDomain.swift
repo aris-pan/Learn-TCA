@@ -3,14 +3,14 @@ import ComposableArchitecture
 
 struct ProductListDomain {
   struct State: Equatable {
-    var productList: IdentifiedArrayOf<ProductDomain.State> = []
+    var productList: IdentifiedArrayOf<ProductFeature.State> = []
     var shouldOpenCart = false
   }
   
   enum Action: Equatable {
     case fetchProducts
     case fetchProductResponse(TaskResult<[Product]>)
-    case product(id: ProductDomain.State.ID, action: ProductDomain.Action)
+    case product(id: ProductFeature.State.ID, action: ProductFeature.Action)
     case setCart(isPresented: Bool)
   }
   
@@ -21,10 +21,13 @@ struct ProductListDomain {
   static let reducer = AnyReducer<
     State, Action, Environment
   >.combine(
-    ProductDomain.reducer.forEach(
+    AnyReducer {
+      ProductFeature()
+    }
+    .forEach(
       state: \.productList,
       action: /Action.product(id:action:),
-      environment: {_ in ProductDomain.Environment()}
+      environment: { $0 }
     ),
     .init { state, action, environment in
       switch action {
@@ -41,7 +44,7 @@ struct ProductListDomain {
         state.productList = IdentifiedArray(
           uniqueElements: products
             .map {
-              ProductDomain.State(
+              ProductFeature.State(
                 id: UUID(),
                 product: $0)
             }
