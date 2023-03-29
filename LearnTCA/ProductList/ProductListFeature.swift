@@ -1,7 +1,6 @@
 import Foundation
 import ComposableArchitecture
 
-
 struct ProductListFeature: ReducerProtocol {
   struct State: Equatable {
     var productList: IdentifiedArrayOf<ProductFeature.State> = []

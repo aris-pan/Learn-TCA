@@ -1,7 +1,6 @@
 import Foundation
 import ComposableArchitecture
 
-
 struct AddToCartFeature: ReducerProtocol {
   struct State: Equatable {
     var counter = 0

@@ -1,7 +1,6 @@
 import Foundation
 import ComposableArchitecture
 
-
 struct ProductFeature: ReducerProtocol {
   struct State: Equatable, Identifiable {
     let id: UUID
