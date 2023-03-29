@@ -36,7 +36,22 @@ struct ProductListView: View {
             send: { .setCart(isPresented: $0) }
           )
         ) {
-          Text("Cart!")
+          CardListView(
+            store: Store(
+              initialState: CartListFeature.State(
+                cartItems: IdentifiedArrayOf(
+                  uniqueElements: CartItem.sample
+                    .map {
+                      CartItemFeature.State(
+                        id: UUID(),
+                        cartItem: $0
+                      )
+                    }
+                )
+              ),
+              reducer: CartListFeature()
+            )
+          )
         }
       }
     }
