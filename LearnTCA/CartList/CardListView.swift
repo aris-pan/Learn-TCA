@@ -5,15 +5,27 @@ struct CardListView: View {
   let store: StoreOf<CartListFeature>
   var body: some View {
     WithViewStore(store) { viewStore in
-      List {
-        ForEachStore(
-          self.store.scope(
-            state: \.cartItems,
-            action: CartListFeature.Action
-              .cartItems(id:action:)
-          )
-        ) {
-          CartCell(store: $0)
+      NavigationStack {
+        List {
+          ForEachStore(
+            self.store.scope(
+              state: \.cartItems,
+              action: CartListFeature.Action
+                .cartItems(id:action:)
+            )
+          ) {
+            CartCell(store: $0)
+          }
+        }
+        .navigationTitle("Cart")
+        .toolbar {
+          ToolbarItem(placement: .navigationBarLeading) {
+            Button {
+              viewStore.send(.didPressCloseButton)
+            } label: {
+              Text("Close")
+            }
+          }
         }
       }
     }

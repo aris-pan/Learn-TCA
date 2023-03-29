@@ -6,6 +6,11 @@ struct ProductFeature: ReducerProtocol {
     let id: UUID
     let product: Product
     var addToCartState = AddToCartFeature.State()
+    
+    var count: Int {
+      get { addToCartState.counter }
+      set { addToCartState.counter = newValue }
+    }
   }
   
   enum Action: Equatable {

@@ -37,19 +37,9 @@ struct ProductListView: View {
           )
         ) {
           CardListView(
-            store: Store(
-              initialState: CartListFeature.State(
-                cartItems: IdentifiedArrayOf(
-                  uniqueElements: CartItem.sample
-                    .map {
-                      CartItemFeature.State(
-                        id: UUID(),
-                        cartItem: $0
-                      )
-                    }
-                )
-              ),
-              reducer: CartListFeature()
+            store: self.store.scope(
+              state: \.cartState,
+              action: ProductListFeature.Action.cart
             )
           )
         }
