@@ -6,7 +6,7 @@ struct Product: Equatable, Identifiable {
   let price: Double
   let description: String
   let category: String
-  let imageString: String
+  let imageURL: URL?
   
   
   static var sample: [Product] {
@@ -17,15 +17,7 @@ struct Product: Equatable, Identifiable {
         price: 22.3,
         description: "Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder ",
         category: "men's clothing",
-        imageString: "tshirt"
-      ),
-      .init(
-        id: 2,
-        title: "Men's Sneakers",
-        price: 34.99,
-        description: "Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder ",
-        category: "men's clothing",
-        imageString: "shoes"
+        imageURL: URL(string: "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg")
       ),
       .init(
         id: 3,
@@ -33,7 +25,7 @@ struct Product: Equatable, Identifiable {
         price: 105.99,
         description: "Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder ",
         category: "men's clothing",
-        imageString: "bag"
+        imageURL: URL(string: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg")
       ),
       .init(
         id: 4,
@@ -41,7 +33,7 @@ struct Product: Equatable, Identifiable {
         price: 44.99,
         description: "Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder Placeholder placeholder ",
         category: "men's clothing",
-        imageString: "jacket"
+        imageURL: URL(string: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg")
       )
     ]
   }

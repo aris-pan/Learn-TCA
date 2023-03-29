@@ -9,9 +9,7 @@ struct CartCell: View {
       VStack {
         HStack {
           AsyncImage(
-            url: URL(
-            string: viewStore.cartItem.product.imageString
-            )
+            url: viewStore.cartItem.product.imageURL
           ) {
             $0
               .resizable()

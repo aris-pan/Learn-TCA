@@ -8,10 +8,7 @@ struct CartListFeature: ReducerProtocol {
   
   enum Action: Equatable {
     case didPressCloseButton
-    case cartItems(
-      id: CartItemFeature.State.ID,
-      action: CartItemFeature.Action
-    )
+    case cartItems(id: CartItemFeature.State.ID, action: CartItemFeature.Action)
   }
   
   var body: some ReducerProtocol<State, Action> {
