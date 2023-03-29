@@ -1,7 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct CardListView: View {
+struct CartListView: View {
   let store: StoreOf<CartListFeature>
   var body: some View {
     WithViewStore(store) { viewStore in
@@ -32,9 +32,9 @@ struct CardListView: View {
   }
 }
 
-struct CardListView_Previews: PreviewProvider {
+struct CartListView_Previews: PreviewProvider {
   static var previews: some View {
-    CardListView(
+    CartListView(
       store: Store(
         initialState: CartListFeature.State(
           cartItems: IdentifiedArrayOf(

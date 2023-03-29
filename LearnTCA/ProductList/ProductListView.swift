@@ -42,7 +42,7 @@ struct ProductListView: View {
               action: ProductListFeature.Action.cart
             )
           ) {
-            CardListView(store: $0)
+            CartListView(store: $0)
           }
         }
       }
