@@ -10,8 +10,8 @@ struct ProductListView: View {
         List {
           ForEachStore(
             self.store.scope(
-              state: \.productList,
-              action: ProductListFeature.Action.product(id:action:)
+              state: \.productItems,
+              action: ProductListFeature.Action.productItems(id:action:)
             )
           ) {
             ProductCell(store: $0)

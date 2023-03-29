@@ -3,12 +3,12 @@ import ComposableArchitecture
 
 struct CartListFeature: ReducerProtocol {
   struct State: Equatable {
-    var cartList: IdentifiedArrayOf<CartItemFeature.State> = []
+    var cartItems: IdentifiedArrayOf<CartItemFeature.State> = []
   }
   
   enum Action: Equatable {
     case didPressCloseButton
-    case cartList(
+    case cartItems(
       id: CartItemFeature.State.ID,
       action: CartItemFeature.Action
     )
@@ -19,11 +19,11 @@ struct CartListFeature: ReducerProtocol {
       switch action {
       case .didPressCloseButton:
         return .none
-      case .cartList:
+      case .cartItems:
         return .none
       }
     }
-    .forEach(\.cartList, action: /Action.cartList) {
+    .forEach(\.cartItems, action: /Action.cartItems) {
       CartItemFeature()
     }
   }

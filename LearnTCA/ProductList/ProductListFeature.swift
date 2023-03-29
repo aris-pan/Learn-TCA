@@ -3,14 +3,14 @@ import ComposableArchitecture
 
 struct ProductListFeature: ReducerProtocol {
   struct State: Equatable {
-    var productList: IdentifiedArrayOf<ProductFeature.State> = []
+    var productItems: IdentifiedArrayOf<ProductFeature.State> = []
     var shouldOpenCart = false
   }
   
   enum Action: Equatable {
     case fetchProducts
     case fetchProductResponse(TaskResult<[Product]>)
-    case product(id: ProductFeature.State.ID, action: ProductFeature.Action)
+    case productItems(id: ProductFeature.State.ID, action: ProductFeature.Action)
     case setCart(isPresented: Bool)
   }
   
@@ -28,7 +28,7 @@ struct ProductListFeature: ReducerProtocol {
           )
         }
       case .fetchProductResponse(.success(let products)):
-        state.productList = IdentifiedArray(
+        state.productItems = IdentifiedArray(
           uniqueElements: products
             .map {
               ProductFeature.State(
@@ -41,13 +41,13 @@ struct ProductListFeature: ReducerProtocol {
         print(error)
         print("Unable to fetch products")
         return .none
-      case .product:
+      case .productItems:
         return .none
       case .setCart(let isPresented):
         state.shouldOpenCart = isPresented
         return .none
       }    }
-    .forEach(\.productList, action: /Action.product) {
+    .forEach(\.productItems, action: /Action.productItems) {
       ProductFeature()
     }
   }
