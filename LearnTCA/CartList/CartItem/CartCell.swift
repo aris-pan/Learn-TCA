@@ -40,6 +40,8 @@ struct CartCell: View {
         .font(.custom("AmericanTypewriter", size: 25))
       }
     }
+    .font(.custom("AmericanTypewriter", size: 25))
+    .padding([.bottom, .top], 10)
   }
 }
 
