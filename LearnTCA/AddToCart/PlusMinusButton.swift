@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct PlusMinusButton: View {
-  let store: Store<AddToCartFeature.State, AddToCartFeature.Action>
+  let store: StoreOf<AddToCartFeature>
   
   var body: some View {
     WithViewStore(self.store) { viewStore in

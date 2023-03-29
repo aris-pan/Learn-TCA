@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ProductCell: View {
-  let store: Store<ProductFeature.State, ProductFeature.Action>
+  let store: StoreOf<ProductFeature>
   
   var body: some View {
     WithViewStore(self.store) { viewStore in

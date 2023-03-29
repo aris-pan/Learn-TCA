@@ -2,7 +2,8 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ProductListView: View {
-  let store: Store<ProductListFeature.State, ProductListFeature.Action>
+  let store: StoreOf<ProductListFeature>
+  
   var body: some View {
     NavigationStack {
       WithViewStore(self.store) { viewStore in
