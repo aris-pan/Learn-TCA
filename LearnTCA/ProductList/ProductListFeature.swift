@@ -4,7 +4,7 @@ import ComposableArchitecture
 struct ProductListFeature: ReducerProtocol {
   struct State: Equatable {
     var productItems: IdentifiedArrayOf<ProductFeature.State> = []
-    var cartState = CartListFeature.State()
+    var cartState: CartListFeature.State?
     var shouldOpenCart = false
   }
   
@@ -19,9 +19,6 @@ struct ProductListFeature: ReducerProtocol {
   var fetchProducts: () async throws -> [Product]
   
   var body: some ReducerProtocol<State, Action> {
-    Scope(state: \.cartState, action: /Action.cart) {
-      CartListFeature()
-    }
     Reduce { state, action in
       switch action {
       case .fetchProducts:
@@ -50,18 +47,23 @@ struct ProductListFeature: ReducerProtocol {
         return .none
       case .setCart(let isPresented):
         state.shouldOpenCart = isPresented
-        state.cartState.cartItems = IdentifiedArray(
-          uniqueElements: state.productItems.compactMap { state in
-            state.count > 0
-            ? CartItemFeature.State(
-              id: UUID(),
-              cartItem: CartItem(
-                product: state.product,
-                quantity: state.count
+        state.cartState = isPresented
+        ? CartListFeature.State(
+          cartItems: IdentifiedArray(
+            uniqueElements: state.productItems.compactMap { state in
+              state.count > 0
+              ? CartItemFeature.State(
+                id: UUID(),
+                cartItem: CartItem(
+                  product: state.product,
+                  quantity: state.count
+                )
               )
-            ) : nil
-          }
+              : nil
+            }
+          )
         )
+        : nil
         return .none
       case .cart(let action):
         switch action {
@@ -72,6 +74,9 @@ struct ProductListFeature: ReducerProtocol {
           return .none
         }
       }
+    }
+    .ifLet(\.cartState, action: /Action.cart) {
+      CartListFeature()
     }
     .forEach(\.productItems, action: /Action.productItems) {
       ProductFeature()

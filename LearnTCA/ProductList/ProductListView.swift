@@ -36,12 +36,14 @@ struct ProductListView: View {
             send: { .setCart(isPresented: $0) }
           )
         ) {
-          CardListView(
-            store: self.store.scope(
+          IfLetStore(
+            self.store.scope(
               state: \.cartState,
               action: ProductListFeature.Action.cart
             )
-          )
+          ) {
+            CardListView(store: $0)
+          }
         }
       }
     }
