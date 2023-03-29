@@ -27,7 +27,6 @@ struct ProductListFeature: ReducerProtocol {
             }
           )
         }
-        
       case .fetchProductResponse(.success(let products)):
         state.productList = IdentifiedArray(
           uniqueElements: products
@@ -38,7 +37,6 @@ struct ProductListFeature: ReducerProtocol {
             }
         )
         return .none
-        
       case .fetchProductResponse(.failure(let error)):
         print(error)
         print("Unable to fetch products")

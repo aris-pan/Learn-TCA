@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct CartCell: View {
-  let store: Store<CartItemDomain.State, CartItemDomain.Action>
+  let store: StoreOf<CartItemFeature>
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -49,12 +49,11 @@ struct CartCell_Previews: PreviewProvider {
   static var previews: some View {
     CartCell(
       store: Store(
-        initialState: CartItemDomain.State(
+        initialState: CartItemFeature.State(
           id: UUID(),
           cartItem: CartItem.sample[0]
         ),
-        reducer: CartItemDomain.reducer,
-        environment: CartItemDomain.Environment()
+        reducer: CartItemFeature()
       )
     )
   }

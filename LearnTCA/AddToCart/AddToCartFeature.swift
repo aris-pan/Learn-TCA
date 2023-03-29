@@ -11,14 +11,16 @@ struct AddToCartFeature: ReducerProtocol {
     case didTapMinusButton
   }
   
-  func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-    switch action {
-    case .didTapPlusButton:
-      state.counter += 1
-      return .none
-    case .didTapMinusButton:
-      state.counter -= 1
-      return .none
+  var body: some ReducerProtocol<State, Action> {
+    Reduce { state, action in
+      switch action {
+      case .didTapPlusButton:
+        state.counter += 1
+        return .none
+      case .didTapMinusButton:
+        state.counter -= 1
+        return .none
+      }
     }
   }
 }
