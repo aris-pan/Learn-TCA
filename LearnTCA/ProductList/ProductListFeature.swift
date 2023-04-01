@@ -70,7 +70,7 @@ struct ProductListFeature: ReducerProtocol {
         case .didPressCloseButton:
           state.shouldOpenCart = false
           return .none
-        case .cartItems:
+        case .cartItems, .pay, .getTotalPrice:
           return .none
         }
       }
