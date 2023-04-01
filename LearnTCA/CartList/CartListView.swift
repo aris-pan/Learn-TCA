@@ -44,11 +44,20 @@ struct CartListView: View {
           .cornerRadius(10)
           .padding()
           .disabled(viewStore.isPayButtonDisabled)
+          
+          .alert(
+            self.store.scope(state: \.confirmationAlert),
+            dismiss: .didCancelConfirmation
+          )
+          .alert(
+            self.store.scope(state: \.errorAlert),
+            dismiss: .dismissErrorAlert
+          )
+          .alert(
+            self.store.scope(state: \.successAlert),
+            dismiss: .dismissSuccessAlert
+          )
         }
-        .alert(
-          self.store.scope(state: \.confirmationAlert),
-          dismiss: .didCancelConfirmation
-        )
         .task {
           viewStore.send(.getTotalPrice)
         }

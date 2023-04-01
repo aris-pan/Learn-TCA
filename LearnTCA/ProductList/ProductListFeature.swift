@@ -71,6 +71,10 @@ struct ProductListFeature: ReducerProtocol {
         case .didPressCloseButton:
           state.shouldOpenCart = false
           return .none
+        case .dismissSuccessAlert:
+          resetProductsInCart(state: &state)
+          state.shouldOpenCart = false
+          return .none
         default:
           return .none
         }
@@ -81,6 +85,14 @@ struct ProductListFeature: ReducerProtocol {
     }
     .forEach(\.productItems, action: /Action.productItems) {
       ProductFeature()
+    }
+  }
+  
+  private func resetProductsInCart(
+    state: inout State
+  ) {
+    for id in state.productItems.map(\.id) {
+      state.productItems[id: id]?.count = 0
     }
   }
 }

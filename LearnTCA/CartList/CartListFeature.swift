@@ -7,6 +7,8 @@ struct CartListFeature: ReducerProtocol {
     var totalPrice: Double = 0.0
     var isPayButtonDisabled = false
     var confirmationAlert: AlertState<Action>?
+    var successAlert: AlertState<Action>?
+    var errorAlert: AlertState<Action>?
   }
   
   enum Action: Equatable {
@@ -17,6 +19,8 @@ struct CartListFeature: ReducerProtocol {
     case didReceivePurchaseResponse(TaskResult<String>)
     case didConfirmPurchase
     case didCancelConfirmation
+    case dismissErrorAlert
+    case dismissSuccessAlert
   }
   
   var sendOrder: (([CartItem]) async throws -> String)
@@ -24,6 +28,12 @@ struct CartListFeature: ReducerProtocol {
   var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
       switch action {
+      case .dismissErrorAlert:
+        state.errorAlert = nil
+        return.none
+      case .dismissSuccessAlert:
+        state.successAlert = nil
+        return.none
       case .didPressCloseButton:
         return .none
       case .cartItems(let id, let action):
@@ -59,11 +69,27 @@ struct CartListFeature: ReducerProtocol {
       case .didCancelConfirmation:
         state.confirmationAlert = nil
         return .none
-      case .didReceivePurchaseResponse(.success(let message)):
-        print(message)
+      case .didReceivePurchaseResponse(.success):
+        state.successAlert = AlertState(
+          title: TextState("Order completed. Thank you!"),
+          buttons: [
+            .default(
+              TextState("Done"),
+              action: .send(.dismissSuccessAlert)
+            )
+          ]
+        )
         return .none
-      case .didReceivePurchaseResponse(.failure(let error)):
-        print(error)
+      case .didReceivePurchaseResponse(.failure):
+        state.errorAlert = AlertState(
+          title: TextState("Oops, there was a problem with your order. Please try again."),
+          buttons: [
+            .default(
+              TextState("Done"),
+              action: .send(.dismissErrorAlert)
+            )
+          ]
+        )
         return .none
       case .didConfirmPurchase:
         let items = state.cartItems.map { $0.cartItem }
@@ -78,6 +104,6 @@ struct CartListFeature: ReducerProtocol {
     }
     .forEach(\.cartItems, action: /Action.cartItems) {
       CartItemFeature()
-    }
+    }._printChanges()
   }
 }

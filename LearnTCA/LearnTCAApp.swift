@@ -1,6 +1,8 @@
 import SwiftUI
 import ComposableArchitecture
 
+struct MyError: Error {}
+
 @main
 struct LearnTCAApp: App {
   var body: some Scene {
@@ -10,7 +12,7 @@ struct LearnTCAApp: App {
           initialState: ProductListFeature.State(),
           reducer: ProductListFeature(
             fetchProducts: { Product.sample },
-            sendOrder: { _ in "OK" }
+            sendOrder: { _ in throw MyError() }
           )
         )
       )
