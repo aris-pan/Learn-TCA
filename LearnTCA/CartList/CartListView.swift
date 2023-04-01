@@ -29,20 +29,21 @@ struct CartListView: View {
         }
         .safeAreaInset(edge: .bottom) {
           Button {
-            viewStore.send(.pay)
+            viewStore.send(.didPressPayButton)
           } label: {
             HStack(alignment: .center) {
               Spacer()
-              Text("Pay \(viewStore.totalPrice.formatted())")
+              Text("Pay $\(viewStore.totalPrice.formatted())")
                 .font(.custom("AmericanTypewriter", size: 30))
                 .foregroundColor(.white)
               Spacer()
             }
           }
           .frame(maxWidth: .infinity, minHeight: 60)
-          .background(.blue)
+          .background(viewStore.isPayButtonDisabled ? .gray : .blue)
           .cornerRadius(10)
           .padding()
+          .disabled(viewStore.isPayButtonDisabled)
         }
       }
       .task {
@@ -67,7 +68,7 @@ struct CartListView_Previews: PreviewProvider {
               }
           )
         ),
-        reducer: CartListFeature()
+        reducer: CartListFeature(sendOrder: { _ in "OK" })
       )
     )
   }

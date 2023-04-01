@@ -12,8 +12,11 @@ struct CartListFeature: ReducerProtocol {
     case didPressCloseButton
     case cartItems(id: CartItemFeature.State.ID, action: CartItemFeature.Action)
     case getTotalPrice
-    case pay
+    case didPressPayButton
+    case didReceivePurchaseResponse(TaskResult<String>)
   }
+  
+  var sendOrder: (([CartItem]) async throws -> String)
   
   var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
@@ -31,10 +34,24 @@ struct CartListFeature: ReducerProtocol {
         state.totalPrice = items.reduce(0.0, {
           $0 + ($1.product.price * Double($1.quantity))
         })
-      case .pay:
+        state.isPayButtonDisabled = state.totalPrice == 0
+        return .none
+      case .didPressPayButton:
+        let items = state.cartItems.map { $0.cartItem }
+        return .task {
+          await .didReceivePurchaseResponse(
+            TaskResult {
+              try await sendOrder(items)
+            }
+          )
+        }
+      case .didReceivePurchaseResponse(.success(let message)):
+        print(message)
+        return .none
+      case .didReceivePurchaseResponse(.failure(let error)):
+        print(error)
         return .none
       }
-      return .none
     }
     .forEach(\.cartItems, action: /Action.cartItems) {
       CartItemFeature()

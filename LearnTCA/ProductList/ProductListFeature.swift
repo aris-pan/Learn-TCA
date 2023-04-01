@@ -17,7 +17,8 @@ struct ProductListFeature: ReducerProtocol {
   }
   
   var fetchProducts: () async throws -> [Product]
-  
+  var sendOrder: (([CartItem]) async throws -> String)
+
   var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
       switch action {
@@ -70,13 +71,13 @@ struct ProductListFeature: ReducerProtocol {
         case .didPressCloseButton:
           state.shouldOpenCart = false
           return .none
-        case .cartItems, .pay, .getTotalPrice:
+        default:
           return .none
         }
       }
     }
     .ifLet(\.cartState, action: /Action.cart) {
-      CartListFeature()
+      CartListFeature(sendOrder: sendOrder)
     }
     .forEach(\.productItems, action: /Action.productItems) {
       ProductFeature()
