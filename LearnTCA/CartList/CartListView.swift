@@ -45,9 +45,13 @@ struct CartListView: View {
           .padding()
           .disabled(viewStore.isPayButtonDisabled)
         }
-      }
-      .task {
-        viewStore.send(.getTotalPrice)
+        .alert(
+          self.store.scope(state: \.confirmationAlert),
+          dismiss: .didCancelConfirmation
+        )
+        .task {
+          viewStore.send(.getTotalPrice)
+        }
       }
     }
   }
