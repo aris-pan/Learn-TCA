@@ -16,8 +16,12 @@ struct CartListFeature: ReducerProtocol {
       switch action {
       case .didPressCloseButton:
         return .none
-      case .cartItems:
-        return .none
+      case .cartItems(let id, let action):
+        switch action {
+        case .deleteCartItem:
+          state.cartItems.remove(id: id)
+          return .none
+        }
       }
     }
     .forEach(\.cartItems, action: /Action.cartItems) {

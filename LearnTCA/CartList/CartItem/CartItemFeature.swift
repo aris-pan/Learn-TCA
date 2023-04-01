@@ -4,17 +4,17 @@ import ComposableArchitecture
 struct CartItemFeature: ReducerProtocol {
   struct State: Equatable, Identifiable {
     let id: UUID
-    let cartItem: CartItem
+    var cartItem: CartItem
   }
   
   enum Action: Equatable {
-    case dummyAction
+    case deleteCartItem
   }
   
   var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
       switch action {
-      case .dummyAction:
+      case .deleteCartItem:
         return .none
       }
     }
