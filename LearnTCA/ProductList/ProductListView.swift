@@ -7,14 +7,26 @@ struct ProductListView: View {
   var body: some View {
     NavigationStack {
       WithViewStore(self.store) { viewStore in
-        List {
-          ForEachStore(
-            self.store.scope(
-              state: \.productItems,
-              action: ProductListFeature.Action.productItems(id:action:)
-            )
-          ) {
-            ProductCell(store: $0)
+        Group {
+          if viewStore.isLoading {
+            ProgressView()
+              .frame(width: 100, height: 100)
+          } else if viewStore.shouldShowError {
+            ErrorView(
+              message: "Oops we couldn't fetch the products") {
+                viewStore.send(.fetchProducts)
+              }
+          } else {
+            List {
+              ForEachStore(
+                self.store.scope(
+                  state: \.productItems,
+                  action: ProductListFeature.Action.productItems(id:action:)
+                )
+              ) {
+                ProductCell(store: $0)
+              }
+            }
           }
         }
         .task {

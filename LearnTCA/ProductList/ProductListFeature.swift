@@ -3,9 +3,18 @@ import ComposableArchitecture
 
 struct ProductListFeature: ReducerProtocol {
   struct State: Equatable {
+    fileprivate var dataLoadingStatus = DataLoadingStatus.notStarted
     var productItems: IdentifiedArrayOf<ProductFeature.State> = []
     var cartState: CartListFeature.State?
     var shouldOpenCart = false
+    
+    var shouldShowError: Bool {
+      dataLoadingStatus == .error
+    }
+    
+    var isLoading: Bool {
+      dataLoadingStatus == .loading
+    }
   }
   
   enum Action: Equatable {
@@ -23,6 +32,12 @@ struct ProductListFeature: ReducerProtocol {
     Reduce { state, action in
       switch action {
       case .fetchProducts:
+        if state.dataLoadingStatus == .success || state.dataLoadingStatus == .loading {
+          return .none
+        }
+        
+        state.dataLoadingStatus = .loading
+        
         return .task {
           await .fetchProductResponse(
             TaskResult {
@@ -31,6 +46,9 @@ struct ProductListFeature: ReducerProtocol {
           )
         }
       case .fetchProductResponse(.success(let products)):
+        
+        state.dataLoadingStatus = .success
+        
         state.productItems = IdentifiedArray(
           uniqueElements: products
             .map {
@@ -41,6 +59,9 @@ struct ProductListFeature: ReducerProtocol {
         )
         return .none
       case .fetchProductResponse(.failure(let error)):
+        
+        state.dataLoadingStatus = .error
+        
         print(error)
         print("Unable to fetch products")
         return .none

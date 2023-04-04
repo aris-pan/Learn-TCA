@@ -6,45 +6,56 @@ struct CartListView: View {
   var body: some View {
     WithViewStore(store) { viewStore in
       NavigationStack {
-        List {
-          ForEachStore(
-            self.store.scope(
-              state: \.cartItems,
-              action: CartListFeature.Action
-                .cartItems(id:action:)
-            )
-          ) {
-            CartCell(store: $0)
-          }
-        }
-        .navigationTitle("Cart")
-        .toolbar {
-          ToolbarItem(placement: .navigationBarLeading) {
-            Button {
-              viewStore.send(.didPressCloseButton)
-            } label: {
-              Text("Close")
+        ZStack {
+          Group {
+            if viewStore.cartItems.isEmpty {
+              Text("Oops, your cart is empty! \n")
+                .font(.custom("AmericanTypewriter", size: 25))
+            } else {
+              List {
+                ForEachStore(
+                  self.store.scope(
+                    state: \.cartItems,
+                    action: CartListFeature.Action
+                      .cartItems(id:action:)
+                  )
+                ) {
+                  CartCell(store: $0)
+                }
+              }
+              .safeAreaInset(edge: .bottom) {
+                Button {
+                  viewStore.send(.didPressPayButton)
+                } label: {
+                  HStack(alignment: .center) {
+                    Spacer()
+                    Text("Pay $\(viewStore.totalPrice.formatted())")
+                      .font(.custom("AmericanTypewriter", size: 30))
+                      .foregroundColor(.white)
+                    Spacer()
+                  }
+                }
+                .frame(maxWidth: .infinity, minHeight: 60)
+                .background(viewStore.isPayButtonDisabled ? .gray : .blue)
+                .cornerRadius(10)
+                .padding()
+                .disabled(viewStore.isPayButtonDisabled)
+              }
             }
           }
-        }
-        .safeAreaInset(edge: .bottom) {
-          Button {
-            viewStore.send(.didPressPayButton)
-          } label: {
-            HStack(alignment: .center) {
-              Spacer()
-              Text("Pay $\(viewStore.totalPrice.formatted())")
-                .font(.custom("AmericanTypewriter", size: 30))
-                .foregroundColor(.white)
-              Spacer()
+          .navigationTitle("Cart")
+          .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+              Button {
+                viewStore.send(.didPressCloseButton)
+              } label: {
+                Text("Close")
+              }
             }
           }
-          .frame(maxWidth: .infinity, minHeight: 60)
-          .background(viewStore.isPayButtonDisabled ? .gray : .blue)
-          .cornerRadius(10)
-          .padding()
-          .disabled(viewStore.isPayButtonDisabled)
-          
+          .task {
+            viewStore.send(.getTotalPrice)
+          }
           .alert(
             self.store.scope(state: \.confirmationAlert),
             dismiss: .didCancelConfirmation
@@ -58,8 +69,10 @@ struct CartListView: View {
             dismiss: .dismissSuccessAlert
           )
         }
-        .task {
-          viewStore.send(.getTotalPrice)
+        if viewStore.isLoading {
+          Color.black.opacity(0.2)
+          ProgressView()
+            .frame(width: 100, height: 100)
         }
       }
     }

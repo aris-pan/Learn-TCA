@@ -11,8 +11,8 @@ struct LearnTCAApp: App {
         store: Store(
           initialState: ProductListFeature.State(),
           reducer: ProductListFeature(
-            fetchProducts: { Product.sample },
-            sendOrder: { _ in throw MyError() }
+            fetchProducts: APIClient.live.fetchProducts,
+            sendOrder: APIClient.live.sendOrder
           )
         )
       )

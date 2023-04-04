@@ -3,12 +3,22 @@ import ComposableArchitecture
 
 struct CartListFeature: ReducerProtocol {
   struct State: Equatable {
+    var dataLoadingStatus = DataLoadingStatus.notStarted
+
     var cartItems: IdentifiedArrayOf<CartItemFeature.State> = []
     var totalPrice: Double = 0.0
     var isPayButtonDisabled = false
     var confirmationAlert: AlertState<Action>?
     var successAlert: AlertState<Action>?
     var errorAlert: AlertState<Action>?
+        
+    var isLoading: Bool {
+      dataLoadingStatus == .loading
+    }
+    
+    var shouldShowError: Bool {
+      dataLoadingStatus == .error
+    }
   }
   
   enum Action: Equatable {
@@ -70,6 +80,8 @@ struct CartListFeature: ReducerProtocol {
         state.confirmationAlert = nil
         return .none
       case .didReceivePurchaseResponse(.success):
+        state.dataLoadingStatus = .success
+
         state.successAlert = AlertState(
           title: TextState("Order completed. Thank you!"),
           buttons: [
@@ -81,6 +93,8 @@ struct CartListFeature: ReducerProtocol {
         )
         return .none
       case .didReceivePurchaseResponse(.failure):
+        state.dataLoadingStatus = .error
+        
         state.errorAlert = AlertState(
           title: TextState("Oops, there was a problem with your order. Please try again."),
           buttons: [
@@ -92,6 +106,12 @@ struct CartListFeature: ReducerProtocol {
         )
         return .none
       case .didConfirmPurchase:
+        if state.dataLoadingStatus == .loading {
+          return .none
+        }
+        
+        state.dataLoadingStatus = .loading
+        
         let items = state.cartItems.map { $0.cartItem }
         return .task {
           await .didReceivePurchaseResponse(
