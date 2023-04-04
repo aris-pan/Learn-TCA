@@ -2,6 +2,8 @@ import Foundation
 import ComposableArchitecture
 
 struct CartListFeature: ReducerProtocol {
+  @Dependency(\.apiClient) var apiClient
+
   struct State: Equatable {
     var dataLoadingStatus = DataLoadingStatus.notStarted
 
@@ -32,9 +34,7 @@ struct CartListFeature: ReducerProtocol {
     case dismissErrorAlert
     case dismissSuccessAlert
   }
-  
-  var sendOrder: (([CartItem]) async throws -> String)
-  
+
   var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
       switch action {
@@ -116,7 +116,7 @@ struct CartListFeature: ReducerProtocol {
         return .task {
           await .didReceivePurchaseResponse(
             TaskResult {
-              try await sendOrder(items)
+              try await apiClient.sendOrder(items)
             }
           )
         }

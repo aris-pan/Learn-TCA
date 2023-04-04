@@ -67,10 +67,7 @@ struct ProductListView_Previews: PreviewProvider {
     ProductListView(
       store: Store(
         initialState: ProductListFeature.State(),
-        reducer: ProductListFeature(
-          fetchProducts: { Product.sample },
-          sendOrder: { _ in "OK" }
-        )
+        reducer: ProductListFeature()
       )
     )
   }

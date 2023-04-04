@@ -2,6 +2,9 @@ import Foundation
 import ComposableArchitecture
 
 struct ProductListFeature: ReducerProtocol {
+  @Dependency(\.uuid) var uuid
+  @Dependency(\.apiClient) var apiClient
+  
   struct State: Equatable {
     fileprivate var dataLoadingStatus = DataLoadingStatus.notStarted
     var productItems: IdentifiedArrayOf<ProductFeature.State> = []
@@ -25,9 +28,6 @@ struct ProductListFeature: ReducerProtocol {
     case cart(CartListFeature.Action)
   }
   
-  var fetchProducts: () async throws -> [Product]
-  var sendOrder: (([CartItem]) async throws -> String)
-
   var body: some ReducerProtocol<State, Action> {
     Reduce { state, action in
       switch action {
@@ -41,7 +41,7 @@ struct ProductListFeature: ReducerProtocol {
         return .task {
           await .fetchProductResponse(
             TaskResult {
-              try await fetchProducts()
+              try await apiClient.fetchProducts()
             }
           )
         }
@@ -53,7 +53,7 @@ struct ProductListFeature: ReducerProtocol {
           uniqueElements: products
             .map {
               ProductFeature.State(
-                id: UUID(),
+                id: uuid(),
                 product: $0)
             }
         )
@@ -75,7 +75,7 @@ struct ProductListFeature: ReducerProtocol {
             uniqueElements: state.productItems.compactMap { state in
               state.count > 0
               ? CartItemFeature.State(
-                id: UUID(),
+                id: uuid(),
                 cartItem: CartItem(
                   product: state.product,
                   quantity: state.count
@@ -102,7 +102,7 @@ struct ProductListFeature: ReducerProtocol {
       }
     }
     .ifLet(\.cartState, action: /Action.cart) {
-      CartListFeature(sendOrder: sendOrder)
+      CartListFeature()
     }
     .forEach(\.productItems, action: /Action.productItems) {
       ProductFeature()

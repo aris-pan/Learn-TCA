@@ -94,7 +94,7 @@ struct CartListView_Previews: PreviewProvider {
               }
           )
         ),
-        reducer: CartListFeature(sendOrder: { _ in "OK" })
+        reducer: CartListFeature()
       )
     )
   }

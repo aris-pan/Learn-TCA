@@ -10,10 +10,7 @@ struct LearnTCAApp: App {
       ProductListView(
         store: Store(
           initialState: ProductListFeature.State(),
-          reducer: ProductListFeature(
-            fetchProducts: APIClient.live.fetchProducts,
-            sendOrder: APIClient.live.sendOrder
-          )
+          reducer: ProductListFeature()
         )
       )
     }

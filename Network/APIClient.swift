@@ -1,4 +1,5 @@
 import Foundation
+import Dependencies
 
 struct APIClient {
   var fetchProducts: () async throws -> [Product]
@@ -7,8 +8,8 @@ struct APIClient {
   struct Failure: Error {}
 }
 
-extension APIClient {
-  static let live: APIClient = Self(
+extension APIClient: DependencyKey {
+  static let liveValue = Self(
     fetchProducts: {
       let (data, _) = try await URLSession.shared
         .data(from: URL(string: "https://fakestoreapi.com/products")!)
@@ -23,9 +24,27 @@ extension APIClient {
       
       let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: payload)
       guard let httpResponse = (response as? HTTPURLResponse) else {
-        throw Failure()
+        throw APIClient.Failure()
       }
       
       return "Status \(httpResponse.statusCode)"
     })
+}
+
+extension APIClient: TestDependencyKey {
+  static let previewValue = Self(
+    fetchProducts: {
+      Product.sample
+    },
+    sendOrder: { _ in
+      "Status 200"
+    }
+  )
+}
+
+extension DependencyValues {
+  var apiClient: APIClient {
+    get { self[APIClient.self] }
+    set { self[APIClient.self] = newValue }
+  }
 }
